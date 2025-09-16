@@ -4,7 +4,8 @@ import { IDropdownSettings } from '../../../ng-multiselect-dropdown/src';
 
 @Component({
   selector: 'multiple-demo',
-  templateUrl: './multiple-demo.html'
+  templateUrl: './multiple-demo.html',
+  standalone: false,
 })
 export class MultipleDemoComponent implements OnInit {
   myForm: FormGroup;

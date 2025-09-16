@@ -1,11 +1,9 @@
-import { NgModule } from '@angular/core';
+import { NgModule, provideZonelessChangeDetection } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
-import { NgMultiSelectDropDownModule } from '../ng-multiselect-dropdown/src';
-// import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 import { SelectSectionComponent } from './components/select-section';
 import { SampleSectionComponent } from './components/sample-section.component';
@@ -14,6 +12,7 @@ import { MultipleDemoComponent } from './components/select/multiple-demo';
 import { ShCodeViewer } from '../code-viewer/code-viewer.module';
 
 import { AppComponent } from './app.component';
+import { NgMultiSelectDropDownModule } from '../ng-multiselect-dropdown/src';
 
 @NgModule({
   declarations: [SelectSectionComponent, SampleSectionComponent, SingleDemoComponent, MultipleDemoComponent, AppComponent],
@@ -21,12 +20,12 @@ import { AppComponent } from './app.component';
     FormsModule,
     ReactiveFormsModule,
     BrowserModule,
-    TabsModule.forRoot(),
-    ButtonsModule.forRoot(),
-    NgMultiSelectDropDownModule.forRoot(),
-    ShCodeViewer
+    TabsModule,
+    ButtonsModule,
+    ShCodeViewer,
+    NgMultiSelectDropDownModule.forRoot()
   ],
-  providers: [],
+  providers: [[provideZonelessChangeDetection()]],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'single-demo',
-  templateUrl: './single-demo.html'
+  templateUrl: './single-demo.html',
+  standalone: false,
 })
 export class SingleDemoComponent implements OnInit {
   cities: Array<string> = [];
