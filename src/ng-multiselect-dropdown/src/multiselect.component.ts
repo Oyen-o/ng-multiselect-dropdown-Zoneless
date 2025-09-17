@@ -1,7 +1,10 @@
 import { Component, HostListener, forwardRef, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
+import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule } from "@angular/forms";
+import { CommonModule } from "@angular/common";
 import { ListItem, IDropdownSettings } from "./multiselect.model";
 import { ListFilterPipe } from "./list-filter.pipe";
+import { ClickOutsideDirective } from "./click-outside.directive";
+import { NgMultiSelectDropDownModule } from "./ng-multiselect-dropdown.module";
 
 export const DROPDOWN_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -15,6 +18,12 @@ const noop = () => {};
   templateUrl: "./multi-select.component.html",
   styleUrls: ["./multi-select.component.scss"],
   providers: [DROPDOWN_CONTROL_VALUE_ACCESSOR],
+    imports: [
+    CommonModule,
+    FormsModule,
+    NgMultiSelectDropDownModule
+  ],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MultiSelectComponent implements ControlValueAccessor {

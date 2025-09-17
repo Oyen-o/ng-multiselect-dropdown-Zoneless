@@ -12,6 +12,7 @@ const tabDesc: any = {
 
 @Component({
   selector: 'select-section',
+  standalone: false,
   template: `
 <section>
   <div class="row">

@@ -104,7 +104,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   color: #75715e;
 }
 `
-    ]
+    ],
+    standalone: false
 })
 export class CodeViewerComponent implements OnInit, OnChanges, AfterViewChecked {
     @Input() useBr: boolean;
@@ -113,7 +114,7 @@ export class CodeViewerComponent implements OnInit, OnChanges, AfterViewChecked 
     @ViewChild('codeView') codeView: ElementRef;
     private needUpdate: boolean;
 
-    constructor(private elementRef: ElementRef) {}
+    constructor() {}
 
     ngOnInit() {
         if (this.useBr) {
