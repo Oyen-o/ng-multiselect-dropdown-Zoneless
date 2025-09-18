@@ -1,3 +1,5 @@
+import { WritableSignal } from "@angular/core";
+
 export interface IDropdownSettings {
   singleSelection?: boolean;
   idField?: string;
@@ -16,7 +18,7 @@ export interface IDropdownSettings {
   noFilteredDataAvailablePlaceholderText?: string;
   closeDropDownOnSelection?: boolean;
   showSelectedItemsAtTop?: boolean;
-  defaultOpen?: boolean;
+  defaultOpen?: WritableSignal<boolean>;
   allowRemoteDataSearch?: boolean;
 }
 
