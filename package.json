@@ -1,6 +1,6 @@
 {
-  "name": "ng-multiselect-dropdown",
-  "version": "1.0.0",
+  "name": "ng-multiselect-dropdown-zoneless",
+  "version": "0.9.0",
   "private": true,
   "description": "Angular Multi-Select Dropdown",
   "author": "Nilesh Patel",
@@ -28,23 +28,21 @@
     "contributors:generate": "all-contributors generate"
   },
   "keywords": [
-    "angular4",
-    "angular8",
+    "angular20",
     "angular multiselect dropdown",
-    "angular4 multiselect dropdown",
-    "angular8 multiselect dropdown",
+    "signals angular multiselect dropdown",
+    "angular20 multiselect dropdown",
     "ng multiselect dropdown",
-    "ng4 multiselect dropdown",
-    "ng8 multiselect dropdown"
+    "ng20 multiselect dropdown"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/nileshpatel17/ng-multiselect-dropdown.git"
+    "url": "https://github.com/Oyen-o/ng-multiselect-dropdown-Zoneless"
   },
   "bugs": {
-    "url": "https://github.com/nileshpatel17/ng-multiselect-dropdown/issues"
+    "url": "https://github.com/Oyen-o/ng-multiselect-dropdown-Zoneless/issues"
   },
-  "homepage": "https://github.com/nileshpatel17/ng-multiselect-dropdown#readme",
+  "homepage": "https://github.com/Oyen-o/ng-multiselect-dropdown-Zoneless#readme",
   "devDependencies": {
     "@angular-devkit/build-angular": "^20.3.1",
     "@angular/cli": "^20.3.1",
