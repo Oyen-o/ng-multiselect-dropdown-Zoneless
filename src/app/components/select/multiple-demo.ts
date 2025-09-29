@@ -1,5 +1,5 @@
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { IDropdownSettings } from '../../../ng-multiselect-dropdown/src';
 
 @Component({
@@ -126,7 +126,7 @@ export class MultipleDemoComponent implements OnInit {
     ];
     this.dropdownSettings = {
       singleSelection: false,
-      defaultOpen: false,
+      defaultOpen: signal<boolean>(false),
       idField: 'item_id',
       textField: 'item_text',
       selectAllText: 'Select All',

@@ -1,9 +1,8 @@
-import { Component, HostListener, forwardRef, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
+import { Component, HostListener, forwardRef, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, signal, Signal, WritableSignal, computed } from "@angular/core";
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { ListItem, IDropdownSettings } from "./multiselect.model";
 import { ListFilterPipe } from "./list-filter.pipe";
-import { ClickOutsideDirective } from "./click-outside.directive";
 import { NgMultiSelectDropDownModule } from "./ng-multiselect-dropdown.module";
 
 export const DROPDOWN_CONTROL_VALUE_ACCESSOR: any = {
@@ -29,8 +28,9 @@ const noop = () => {};
 export class MultiSelectComponent implements ControlValueAccessor {
   public _settings: IDropdownSettings;
   public _data: Array<ListItem> = [];
-  public selectedItems: Array<ListItem> = [];
-  public isDropdownOpen = true;
+  public selectedItems: WritableSignal<Array<ListItem>> = signal<Array<ListItem>>([]);
+  private isDropdownOpen: WritableSignal<boolean> = signal<boolean>(false);
+
   _placeholder = "Select";
   private _sourceDataType = null; // to keep note of the source data type. could be array of string/number/object
   private _sourceDataFields: Array<String> = []; // store source data fields names
@@ -53,9 +53,11 @@ export class MultiSelectComponent implements ControlValueAccessor {
     noFilteredDataAvailablePlaceholderText: "No filtered data available",
     closeDropDownOnSelection: false,
     showSelectedItemsAtTop: false,
-    defaultOpen: false,
+    defaultOpen: signal<boolean>(false),
     allowRemoteDataSearch: false
   };
+
+  public open: Signal<boolean> = computed(() => this._settings.defaultOpen() || this.isDropdownOpen());
 
   @Input()
   public set placeholder(value: string) {
@@ -68,7 +70,7 @@ export class MultiSelectComponent implements ControlValueAccessor {
   @Input()
   disabled = false;
 
-  @Input()
+  @Input({required: true})
   public set settings(value: IDropdownSettings) {
     if (value) {
       this._settings = Object.assign(this.defaultSettings, value);
@@ -132,7 +134,7 @@ export class MultiSelectComponent implements ControlValueAccessor {
     }
 
     const found = this.isSelected(item);
-    const allowAdd = this._settings.limitSelection === -1 || (this._settings.limitSelection > 0 && this.selectedItems.length < this._settings.limitSelection);
+    const allowAdd = this._settings.limitSelection === -1 || (this._settings.limitSelection > 0 && this.selectedItems().length < this._settings.limitSelection);
     if (!found) {
       if (allowAdd) {
         this.addSelected(item);
@@ -151,7 +153,7 @@ export class MultiSelectComponent implements ControlValueAccessor {
         try {
           if (value.length >= 1) {
             const firstItem = value[0];
-            this.selectedItems = [
+            this.selectedItems.set([
               typeof firstItem === "string" || typeof firstItem === "number"
                 ? new ListItem(firstItem)
                 : new ListItem({
@@ -159,7 +161,7 @@ export class MultiSelectComponent implements ControlValueAccessor {
                     text: firstItem[this._settings.textField],
                     isDisabled: firstItem[this._settings.disabledField]
                   })
-            ];
+            ]);
           }
         } catch (e) {
           // console.error(e.body.msg);
@@ -175,13 +177,13 @@ export class MultiSelectComponent implements ControlValueAccessor {
               })
         );
         if (this._settings.limitSelection > 0) {
-          this.selectedItems = _data.splice(0, this._settings.limitSelection);
+          this.selectedItems.set(_data.splice(0, this._settings.limitSelection));
         } else {
-          this.selectedItems = _data;
+          this.selectedItems.set(_data);
         }
       }
     } else {
-      this.selectedItems = [];
+      this.selectedItems.set([]);
     }
     this.onChangeCallback(value);
 
@@ -211,7 +213,7 @@ export class MultiSelectComponent implements ControlValueAccessor {
 
   isSelected(clickedItem: ListItem) {
     let found = false;
-    this.selectedItems.forEach(item => {
+    this.selectedItems().forEach(item => {
       if (clickedItem.id === item.id) {
         found = true;
       }
@@ -220,7 +222,7 @@ export class MultiSelectComponent implements ControlValueAccessor {
   }
 
   isLimitSelectionReached(): boolean {
-    return this._settings.limitSelection === this.selectedItems.length;
+    return this._settings.limitSelection === this.selectedItems().length;
   }
 
   isAllItemsSelected(): boolean {
@@ -231,7 +233,7 @@ export class MultiSelectComponent implements ControlValueAccessor {
     if ((!this.data || this.data.length === 0) && this._settings.allowRemoteDataSearch) {
       return false;
     }
-    return filteredItems.length === this.selectedItems.length + itemDisabledCount;
+    return filteredItems.length === this.selectedItems().length + itemDisabledCount;
   }
 
   showButton(): boolean {
@@ -248,27 +250,27 @@ export class MultiSelectComponent implements ControlValueAccessor {
   }
 
   itemShowRemaining(): number {
-    return this.selectedItems.length - this._settings.itemsShowLimit;
+    return this.selectedItems().length - this._settings.itemsShowLimit;
   }
 
   addSelected(item: ListItem) {
     if (this._settings.singleSelection) {
-      this.selectedItems = [];
-      this.selectedItems.push(item);
+      this.selectedItems.set([]);
+      this.selectedItems.set([item]);
     } else {
-      this.selectedItems.push(item);
+      this.selectedItems.set([...this.selectedItems(), item]);
     }
-    this.onChangeCallback(this.emittedValue(this.selectedItems));
+    this.onChangeCallback(this.emittedValue(this.selectedItems()));
     this.onSelect.emit(this.emittedValue(item));
   }
 
   removeSelected(itemSel: ListItem) {
-    this.selectedItems.forEach(item => {
+    this.selectedItems().forEach(item => {
       if (itemSel.id === item.id) {
-        this.selectedItems.splice(this.selectedItems.indexOf(item), 1);
+        this.selectedItems.set([...this.selectedItems().filter(item => item.id !== itemSel.id)]);
       }
     });
-    this.onChangeCallback(this.emittedValue(this.selectedItems));
+    this.onChangeCallback(this.emittedValue(this.selectedItems()));
     this.onDeSelect.emit(this.emittedValue(itemSel));
   }
 
@@ -308,15 +310,13 @@ export class MultiSelectComponent implements ControlValueAccessor {
     if (this.disabled && this._settings.singleSelection) {
       return;
     }
-    this._settings.defaultOpen = !this._settings.defaultOpen;
-    if (!this._settings.defaultOpen) {
-      this.onDropDownClose.emit();
-    }
+    this.isDropdownOpen.set(!this.isDropdownOpen());
+    console.log("should open",this.isDropdownOpen());
   }
 
   closeDropdown() {
-    this._settings.defaultOpen = false;
-    // clear search text
+    this.isDropdownOpen.set(false)
+    // clear search text 
     if (this._settings.clearSearchFilter) {
       this.filter.text = "";
     }
@@ -329,13 +329,13 @@ export class MultiSelectComponent implements ControlValueAccessor {
     }
     if (!this.isAllItemsSelected()) {
       // filter out disabled item first before slicing
-      this.selectedItems = this.listFilterPipe.transform(this._data,this.filter).filter(item => !item.isDisabled).slice();
-      this.onSelectAll.emit(this.emittedValue(this.selectedItems));
+      this.selectedItems.set(this.listFilterPipe.transform(this._data,this.filter).filter(item => !item.isDisabled).slice());
+      this.onSelectAll.emit(this.emittedValue(this.selectedItems()));
     } else {
-      this.selectedItems = [];
-      this.onDeSelectAll.emit(this.emittedValue(this.selectedItems));
+      this.selectedItems.set([]);
+      this.onDeSelectAll.emit(this.emittedValue(this.selectedItems()));
     }
-    this.onChangeCallback(this.emittedValue(this.selectedItems));
+    this.onChangeCallback(this.emittedValue(this.selectedItems()));
   }
 
   getFields(inputData) {
