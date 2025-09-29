@@ -1,15 +1,20 @@
-# Angular Multiselect Dropdown
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+# Angular Multiselect Dropdown (Zoneless)
 
-[![npm version](https://img.shields.io/npm/v/ng-multiselect-dropdown.svg)](https://www.npmjs.com/package/ng-multiselect-dropdown)
-[![downloads](https://img.shields.io/npm/dt/ng-multiselect-dropdown.svg)](https://www.npmjs.com/package/ng-multiselect-dropdown)
-[![downloads](https://img.shields.io/npm/dm/ng-multiselect-dropdown.svg)](https://www.npmjs.com/package/ng-multiselect-dropdown)
+[![npm version](https://img.shields.io/npm/v/@oyen-o/ng-multiselect-dropdown-zoneless.svg)](https://www.npmjs.com/package/@oyen-o/ng-multiselect-dropdown-zoneless)
+[![downloads](https://img.shields.io/npm/dt/@oyen-o/ng-multiselect-dropdown-zoneless.svg)](https://www.npmjs.com/package/@oyen-o/ng-multiselect-dropdown-zoneless)
+[![downloads](https://img.shields.io/npm/dm/@oyen-o/ng-multiselect-dropdown-zoneless.svg)](https://www.npmjs.com/package/@oyen-o/ng-multiselect-dropdown-zoneless)
 
-Angular multiselect dropdown component for web applications. Easy to integrate and use. It can be bind to any custom data source.
+Angular multiselect dropdown component with **Zoneless Support** for Angular 17+. This modernized version uses Angular Signals and supports standalone components for better performance and developer experience.
 
-# [Demo](https://nileshpatel17.github.io/ng-multiselect-dropdown/)
+## ✨ Features
+
+- **Zoneless Support**: Optimized for Angular's experimental zoneless mode
+- **Angular Signals**: Uses reactive signals for better performance
+- **Standalone Component**: No need to import modules
+- **Modern Angular**: Compatible with Angular 17, 18, 19, and 20+
+- **TypeScript 5+**: Full TypeScript support with latest features
+
+## [Demo](https://nileshpatel17.github.io/ng-multiselect-dropdown/)
 
 ![demo](Screenshots/ng-multiselect-dropdown_v0.1.6.gif)
 
@@ -26,14 +31,40 @@ Angular multiselect dropdown component for web applications. Easy to integrate a
 
 ### Installation
 
-```
-npm install ng-multiselect-dropdown
+```bash
+npm install @oyen-o/ng-multiselect-dropdown-zoneless
 ```
 
-And then include it in your module (see [app.module.ts](https://github.com/NileshPatel17/ng-multiselect-dropdown/blob/master/src/app/app.module.ts)):
+### Usage with Standalone Components (Recommended)
 
-```ts
-import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+```typescript
+import { Component } from '@angular/core';
+import { MultiSelectComponent } from '@oyen-o/ng-multiselect-dropdown-zoneless';
+
+@Component({
+  selector: 'app-example',
+  standalone: true,
+  imports: [MultiSelectComponent],
+  template: `
+    <ng-multiselect-dropdown
+      [placeholder]="'Select Items'"
+      [data]="dropdownList"
+      [(ngModel)]="selectedItems"
+      [settings]="dropdownSettings">
+    </ng-multiselect-dropdown>
+  `
+})
+export class ExampleComponent {
+  dropdownList: any[] = [];
+  selectedItems: any[] = [];
+  dropdownSettings = {};
+}
+```
+
+### Usage with NgModule (Legacy)
+
+```typescript
+import { NgMultiSelectDropDownModule } from '@oyen-o/ng-multiselect-dropdown-zoneless';
 // ...
 
 @NgModule({

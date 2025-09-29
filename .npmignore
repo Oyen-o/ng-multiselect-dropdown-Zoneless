@@ -1,0 +1,45 @@
+# Source files
+src/
+e2e/
+Screenshots/
+
+# Development files
+.angular/
+.vscode/
+node_modules/
+dist/
+coverage/
+
+# Configuration files
+angular.json
+karma.conf.js
+jest.config.js
+protractor.conf.js
+tsconfig.json
+tsconfig.*.json
+tslint.json
+ng-package.json
+package-lib-template.json
+
+# Documentation
+CHANGELOG.md
+ISSUE_TEMPLATE.md
+custom-theme.md
+publish-package.md
+
+# Git files
+.gitignore
+.git/
+
+# IDE files
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.tgz
+*.log

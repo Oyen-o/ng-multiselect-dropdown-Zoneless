@@ -1,8 +1,7 @@
 {
-  "name": "ng-multiselect-dropdown-zoneless",
-  "version": "0.9.0",
-  "private": true,
-  "description": "Angular Multi-Select Dropdown",
+  "name": "@oyen-o/ng-multiselect-dropdown-zoneless",
+  "version": "1.0.0",
+  "description": "Angular Multi-Select Dropdown with Zoneless Support for Angular 17+",
   "author": "Nilesh Patel",
   "license": "MIT",
   "scripts": {
@@ -20,6 +19,12 @@
     "copyfiles": "mkdir dist-lib/themes && copyfiles ng-multiselect-dropdown.theme.scss dist-lib/themes",
     "build:lib": "npm run clear:lib && ng-packagr -p ng-package.json",
     "postbuild:lib": "npm run copyfiles",
+    "prepublish:lib": "npm run build:lib",
+    "publish:lib": "cd dist-lib && npm publish --access public",
+    "publish:dry-run": "cd dist-lib && npm publish --dry-run --access public",
+    "version:patch": "npm version patch && npm run publish:lib",
+    "version:minor": "npm version minor && npm run publish:lib",
+    "version:major": "npm version major && npm run publish:lib",
     "prepublish": "npm run build",
     "publish": "ngh --no-silent false --name=\"nileshpatel17\" --email=\"nilesh.nvs@hotmail.com\"",
     "deploy": "ng build --prod --base-href /ng-multiselect-dropdown/ && npm run deployOnly",
@@ -28,7 +33,17 @@
     "contributors:generate": "all-contributors generate"
   },
   "keywords": [
+    "angular",
+    "angular17",
+    "angular18",
+    "angular19",
     "angular20",
+    "multiselect",
+    "dropdown",
+    "zoneless",
+    "signals",
+    "standalone",
+    "ng-multiselect-dropdown",
     "angular multiselect dropdown",
     "signals angular multiselect dropdown",
     "angular20 multiselect dropdown",
@@ -43,6 +58,14 @@
     "url": "https://github.com/Oyen-o/ng-multiselect-dropdown-Zoneless/issues"
   },
   "homepage": "https://github.com/Oyen-o/ng-multiselect-dropdown-Zoneless#readme",
+  "main": "bundles/ng-multiselect-dropdown.umd.js",
+  "module": "fesm2022/ng-multiselect-dropdown.mjs",
+  "typings": "index.d.ts",
+  "peerDependencies": {
+    "@angular/core": ">=17.0.0",
+    "@angular/common": ">=17.0.0",
+    "@angular/forms": ">=17.0.0"
+  },
   "devDependencies": {
     "@angular-devkit/build-angular": "^20.3.1",
     "@angular/cli": "^20.3.1",
